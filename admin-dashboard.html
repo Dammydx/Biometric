@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Biometric Attendance System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Attendance Records</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceTable">
+                <!-- Records will be populated here -->
+            </tbody>
+        </table>
+        <a href="index.html">Logout</a>
+    </div>
+    <script>
+        // Load attendance records from local storage
+        document.addEventListener('DOMContentLoaded', () => {
+            const attendanceData = JSON.parse(localStorage.getItem('attendanceData')) || [];
+            const attendanceTable = document.getElementById('attendanceTable');
+            
+            attendanceData.forEach(record => {
+                const row = document.createElement('tr');
+                
+                const [date, time] = record.time.split(', ');
+                row.innerHTML = `
+                    <td>${record.name}</td>
+                    <td>${record.department}</td>
+                    <td>${date}</td>
+                    <td>${time}</td>
+                `;
+                attendanceTable.appendChild(row);
+            });
+        });
+    </script>
+</body>
+</html>
