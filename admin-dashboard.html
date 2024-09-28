@@ -5,10 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Biometric Attendance System</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Added styles for the download button */
+        #downloadWord { 
+            margin-bottom: 20px; 
+            padding: 10px 20px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 16px; 
+        }
+
+        #downloadWord:hover { 
+            background-color: #45a049; 
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h2>Attendance Records</h2>
+        
+        <!-- Added Download as Word Document button -->
+        <button id="downloadWord">Download as Word Document</button> 
+
         <table>
             <thead>
                 <tr>
@@ -43,6 +63,86 @@
                 attendanceTable.appendChild(row);
             });
         });
+
+        // Added: Function to download attendance data as Word document
+        document.getElementById('downloadWord').addEventListener('click', () => { // Added
+            const attendanceData = JSON.parse(localStorage.getItem('attendanceData')) || []; // Added
+            if (attendanceData.length === 0) { // Added
+                alert('No attendance records to download.'); // Added
+                return; // Added
+            }
+
+            // Create HTML content for Word
+            let docContent = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+                      xmlns:w="urn:schemas-microsoft-com:office:word" 
+                      xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Attendance Records</title>
+                    <style>
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        th, td {
+                            border: 1px solid black;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>Attendance Records</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            attendanceData.forEach(record => { 
+                const [date, time] = record.time.split(', '); 
+                docContent += `
+                    <tr>
+                        <td>${record.name}</td>
+                        <td>${record.department}</td>
+                        <td>${date}</td>
+                        <td>${time}</td>
+                    </tr>
+                `; 
+            });
+
+            docContent += `
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            // Convert HTML to Blob
+            const blob = new Blob(['\ufeff', docContent], { 
+                type: 'application/msword' // Added
+            }); 
+
+            // Create download link
+            const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(docContent); 
+            const downloadLink = document.createElement('a'); 
+            downloadLink.href = url; 
+            downloadLink.download = 'AttendanceRecords.doc'; 
+
+            document.body.appendChild(downloadLink); 
+            downloadLink.click(); 
+            document.body.removeChild(downloadLink); 
+        }); 
     </script>
 </body>
 </html>
