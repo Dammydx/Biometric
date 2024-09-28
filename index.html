@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biometric Attendance System</title>
     <style>
@@ -13,7 +13,12 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f1f1f1;
+            background-color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .loading-container {
+            text-align: center;
         }
 
         .loader {
@@ -23,31 +28,36 @@
             width: 60px;
             height: 60px;
             animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Add the blue text */
+        .loading-text {
+            color: #3498db; /* Light blue color */
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
-
 <body>
-    <div class="loader"></div>
+
+    <div class="loading-container">
+        <div class="loader"></div>
+        <div class="loading-text">Biometric Attendance System</div> <!-- Added text -->
+    </div>
 
     <script>
-        // Generate a random time between 1000ms (1s) and 6000ms (6s)
-        const loadingTime = Math.floor(Math.random() * 5000) + 1000;
-
-        // Redirect to home.html after the random time
-        setTimeout(() => {
+        // Redirect to the home.html page after 4 seconds
+        setTimeout(function () {
             window.location.href = "home.html";
-        }, loadingTime);
+        }, 4000); // You can change this to any desired timeout (e.g., 5000ms for 5 seconds)
     </script>
-</body>
 
+</body>
 </html>
